@@ -1,0 +1,30 @@
+package model;
+
+import java.util.List;
+
+/**
+ * @author Richard Benjamin
+ * @version 20151009
+ *
+ */
+public interface IBaseballStatsDAO {
+
+	void createRecord(BaseballStats baseballstats);
+
+	BaseballStats retrieveRecordById(int id);
+
+	List<BaseballStats> retrieveAllRecords();
+
+	void updateRecord(BaseballStats updatedBaseballStats);
+
+	void deleteRecord(int id);
+
+	void deleteRecord(BaseballStats baseballstats);
+	
+	void getMostHomeRuns();
+	
+	void deleteAllRecords();
+
+	String toString();
+
+}
