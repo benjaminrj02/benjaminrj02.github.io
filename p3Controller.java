@@ -16,7 +16,7 @@ import model.User;
  * which then updates the model / database as needed and transfers control with
  * data to one the the HTML/JSP view-oriented programs for display.
  *
- * @author Richard Benjamin
+ * @author John Phillips
  */
 public class Controller extends HttpServlet {
 
@@ -34,7 +34,7 @@ public class Controller extends HttpServlet {
 
         // get real path to the sqlite db
         ServletContext sc = this.getServletContext();
-        String dbPath = sc.getRealPath("/WEB-INF/grades.db");
+        String dbPath = sc.getRealPath("/WEB-INF/superstar.db");
 
         // set default url
         String url = "/home.html";
@@ -52,30 +52,29 @@ public class Controller extends HttpServlet {
 
         } else if (action.equalsIgnoreCase("createRecord")) {
             System.out.println("controller:createRecord");
-            int id = 0;
+            int bloodSugar = 0;
 
             // get parameters passed in from the request
-            id = Integer.parseInt(request.getParameter("id"));
             String email = request.getParameter("email");
-            grades = Integer.parseInt(request.getParameter("grades"));
+            String bloodString = request.getParameter("bloodsugar");
             String date = request.getParameter("date");
             String time = request.getParameter("time");
             String notes = request.getParameter("notes");
 
             // validate and convert salary string into a double
-//            if (gradeString == null || gradeString.isEmpty()) {
-//                id = 0;
-//            } else {
-//                id = Integer.parseInt(gradeString);
-//            }
+            if (bloodString == null || bloodString.isEmpty()) {
+                bloodSugar = 0;
+            } else {
+                bloodSugar = Integer.parseInt(bloodString);
+            }
 
             // store data in an User object
-            User user = new User(0,email,100, date, time, notes);
+            User user = new User(0, email, bloodSugar, date, time, notes);
             System.out.println("Controller:createRecord:user=" + user);
 
             // validate the parameters
-            if (id == 0 || date == null || time == null
-                    || id.isEmpty() || date.isEmpty() || time.isEmpty()) {
+            if (email == null || date == null || time == null
+                    || email.isEmpty() || date.isEmpty() || time.isEmpty()) {
                 url = "/createRecord.jsp";
             } else {
                 // insert this data record into the database
@@ -85,15 +84,15 @@ public class Controller extends HttpServlet {
 
         } else if (action.equalsIgnoreCase("report")) {
             System.out.println("controller:report");
-            id = Integer.parseInt(request.getParameter("id"));
-            if (id == null || id.isEmpty()) {
-                id = "%";
+            String email = request.getParameter("email");
+            if (email == null || email.isEmpty()) {
+                email = "%";
             }
             String startdate = request.getParameter("startdate");
             String enddate = request.getParameter("enddate");
             String lowhigh = request.getParameter("lowhigh");
-            List<User> mydata = DAOSQLite.retrieveRecords(dbPath, id, startdate, enddate, lowhigh);
-            request.setAttribute("id", id);
+            List<User> mydata = DAOSQLite.retrieveRecords(dbPath, email, startdate, enddate, lowhigh);
+            request.setAttribute("email", email);
             request.setAttribute("startdate", startdate);
             request.setAttribute("enddate", enddate);
             request.setAttribute("lowhigh", lowhigh);
