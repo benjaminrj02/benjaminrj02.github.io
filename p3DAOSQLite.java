@@ -15,8 +15,8 @@ import model.User;
 /**
  * DAOSQLite Data Access Object for an SQLite database
  *
- * @author Richard Benjamin
- * @version 0.3 on 2015-11-03 revised 2015-11-19
+ * @author Richard
+ * @version 0.3 on 2015-11-29
  */
 public class DAOSQLite {
 
@@ -31,12 +31,12 @@ public class DAOSQLite {
      * @param dbPath the path to the SQLite database
      */
     public static void createRecord(User user, String dbPath) {
-        String q = "insert into user (id, email, grades, date, time, notes) "
+        String q = "insert into user (id, email, bloodsugar, date, time, notes) "
                 + "values (null, ?, ?, ?, ?, ?)";
         try (Connection conn = getConnectionDAO(dbPath);
                 PreparedStatement ps = conn.prepareStatement(q)) {
             ps.setString(1, user.getEmail());
-            ps.setInt(2, user.getGrades());
+            ps.setInt(2, user.getBloodSugar());
             ps.setString(3, user.getDate());
             ps.setString(4, user.getTime());
             ps.setString(5, user.getNotes());
@@ -73,28 +73,28 @@ public class DAOSQLite {
      * passed in.
      *
      * @param dbPath the path to the SQLite database
-     * @param id - the email of the user/patient
+     * @param email - the email of the user/patient
      * @param startdate - the starting date of the readings to show
      * @param enddate - the ending date of the readings to show
-     * @param lowhigh - controls which grades levels to show; values include all, low, high, and lowhigh
+     * @param lowhigh - controls which bloodsugar levels to show; values include all, low, high, and lowhigh
      * @return list of objects
      */
-    public static List<User> retrieveRecords(String dbPath, String id, String startdate, String enddate, String lowhigh) {
+    public static List<User> retrieveRecords(String dbPath, String email, String startdate, String enddate, String lowhigh) {
         // Need a better solution to the hard coded low/high values below.
-        String q = "select * from user where date between ? and ? order by id, date, time";
+        String q = "select * from user where email like ? and date between ? and ? order by email, date, time";
         if (lowhigh.equalsIgnoreCase("low")) {
-            q = "select * from user where email like ? and date between ? and ? and grades < 50 order by id, date, time";
+            q = "select * from user where email like ? and date between ? and ? and bloodsugar < 70 order by email, date, time";
         } else if (lowhigh.equalsIgnoreCase("high")) {
-            q = "select * from user where email like ? and date between ? and ? and grades > 100 order by id, date, time";
+            q = "select * from user where email like ? and date between ? and ? and bloodsugar > 85 order by email, date, time";
         } else if (lowhigh.equalsIgnoreCase("lowhigh")) {
-            q = "select * from user where email like ? and date between ? and ? and (grades < 50 or bloodsugar > 100) order by id, date, time";
+            q = "select * from user where email like ? and date between ? and ? and (bloodsugar < 70 or bloodsugar > 85) order by email, date, time";
         }
 
         List<User> list = null;
         try (Connection conn = getConnectionDAO(dbPath);
                 PreparedStatement ps = conn.prepareStatement(q)) {
             // the % sign is an sql wildcard so that we can search by just a few letters of the email name
-            ps.setString(1, id + "%");
+            ps.setString(1, email + "%");
             ps.setString(2, startdate);
             ps.setString(3, enddate);
             System.out.println(q);
@@ -170,27 +170,27 @@ public class DAOSQLite {
      */
     public static void populateTable(String dbPath) {
         User p;
-        p = new User(1, "katie@test.com", 100, "2015-09-01", "03:30", "This is an example of a normal reading.");
+        p = new User(0, "katie@test.com", 53, "2015-09-01", "03:30", "This is an example of a normal reading.");
         DAOSQLite.createRecord(p, dbPath);
-        p = new User(2, "email@email1.com", 100, "2015-10-16", "13:50", "This is an example of a high reading.");
+        p = new User(0, "katie@test.com", 65, "2015-10-16", "13:50", "This is an example of a high reading.");
         DAOSQLite.createRecord(p, dbPath);
-        p = new User(3, "email@email2.com", 95, "2015-11-02", "12:30", "This is an example of a low reading.");
+        p = new User(0, "katie@test.com", 21, "2015-11-02", "12:30", "This is an example of a low reading.");
         DAOSQLite.createRecord(p, dbPath);
-        p = new User(4, "email@email3.com", 80, "2015-11-05", "15:00", "This is an example of a normal reading.");
+        p = new User(0, "katie@test.com", 99, "2015-11-05", "15:00", "This is an example of a normal reading.");
         DAOSQLite.createRecord(p, dbPath);
-        p = new User(5, "email@email4.com", 75, "2015-11-07", "06:30", "This is an example of a normal reading.");
+        p = new User(0, "katie@test.com", 100, "2015-11-07", "06:30", "This is an example of a normal reading.");
         DAOSQLite.createRecord(p, dbPath);
-        p = new User(6, "email@email4.com", 70, "2015-11-15", "15:00", "This is an example of a normal reading.");
+        p = new User(0, "katie@test.com", 85, "2015-11-15", "15:00", "This is an example of a normal reading.");
         DAOSQLite.createRecord(p, dbPath);
-        p = new User(7, "email@email5.com", 60, "2015-11-17", "06:30", "This is an example of an out of order date.");
+        p = new User(0, "katie@test.com", 89, "2015-11-17", "06:30", "This is an example of an out of order date.");
         DAOSQLite.createRecord(p, dbPath);
-        p = new User(8, "email@email6.com", 50, "2015-11-17", "05:00", "This is an example of an out of order time.");
+        p = new User(0, "katie@test.com", 92, "2015-11-17", "05:00", "This is an example of an out of order time.");
         DAOSQLite.createRecord(p, dbPath);
-        p = new User(9, "email@email7.com", 88, "2015-11-17", "16:30", "This is an example of a high grade");
+        p = new User(0, "katie@test.com", 45, "2015-11-17", "16:30", "This is an example of a normal reading.");
         DAOSQLite.createRecord(p, dbPath);
-        p = new User(10, "email@email8.com", 94, "2015-11-04", "15:00", "This is an example of a high.");
+        p = new User(0, "katie@test.com", 65, "2015-11-04", "15:00", "This is an example of a normal reading.");
         DAOSQLite.createRecord(p, dbPath);
-        p = new User(11, "email@email9.com", 99, "2015-11-07", "09:30", "This is an example of a high grade");
+        p = new User(0, "katie@test.com", 70, "2015-11-07", "09:30", "This is an example of a normal reading.");
         DAOSQLite.createRecord(p, dbPath);
     }
 
@@ -208,11 +208,11 @@ public class DAOSQLite {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String email = rs.getString("email");
-                int grades = rs.getInt("grades");
+                int bloodsugar = rs.getInt("bloodsugar");
                 String date = rs.getString("date");
                 String time = rs.getString("time");
                 String notes = rs.getString("notes");
-                User p = new User(id, email, grades, date, time, notes);
+                User p = new User(id, email, bloodsugar, date, time, notes);
                 list.add(p);
             }
         } catch (SQLException ex) {
