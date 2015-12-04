@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 /**
  *
- * @author John Phillips
+ * @author Richard Benjamin
  */
 public class User implements Serializable {
 
     private int id;
     private String email;
-    private int grades;
+    private int bloodSugar;
     private String date;
     private String time;
     private String notes;
@@ -18,16 +18,16 @@ public class User implements Serializable {
     public User() {
         id = 0;
         email = "none@test.com";
-        grades = 0;
+        bloodSugar = 0;
         date = "1970-01-01";
         time = "00:01 AM";
         notes = "none";
     }
 
-    public User(int id, String email, int grades, String date, String time, String notes) {
+    public User(int id, String email, int bloodSugar, String date, String time, String notes) {
         this.id = id;
         this.email = email;
-        this.grades = grades;
+        this.bloodSugar = bloodSugar;
         this.date = date;
         this.time = time;
         this.notes = notes;
@@ -49,12 +49,12 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public int getGrades() {
-        return grades;
+    public int getBloodSugar() {
+        return bloodSugar;
     }
 
-    public void setGrades(int grades) {
-        this.grades = grades;
+    public void setBloodSugar(int bloodSugar) {
+        this.bloodSugar = bloodSugar;
     }
 
     public String getDate() {
@@ -84,7 +84,7 @@ public class User implements Serializable {
     public String inHTMLRowFormat() {
         return "<tr><td>" + id + "</td>"
                 + "<td>" + email + "</td>"
-                + "<td>" + grades + "</td>"
+                + "<td>" + bloodSugar + "</td>"
                 + "<td>" + date + "</td>"
                 + "<td>" + time + "</td>"
                 + "<td>" + notes + "</td></tr>\n";
@@ -92,8 +92,8 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", email=" + email + ", grades="
-                + grades + ", date=" + date + ", time=" + time
+        return "User{" + "id=" + id + ", email=" + email + ", bloodSugar="
+                + bloodSugar + ", date=" + date + ", time=" + time
                 + ", notes=" + notes + '}';
     }
 }
