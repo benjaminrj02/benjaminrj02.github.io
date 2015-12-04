@@ -1,7 +1,7 @@
 <%-- 
-    Document   : getReportByDateRange.jsp
-    Created on : Nov 19, 2015, 4:27:29 PM
-    Author     : John Phillips
+    Document   : createRecord
+    Created on : November 29, 2015
+    Author     : Richard Benjamin
 --%>
 
 <%@page import="java.time.format.DateTimeFormatter"%>
@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Grade Collector</title>
+        <title>Grade Tracker</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="mystyle.css">
@@ -32,12 +32,12 @@
         </script>
     </head>
     <body>
-        <h1><a href="home.html">Grade Collector</a></h1>
+        <h1><a href="home.html">Grade Tracker</a></h1>
         <h2>Student Report</h2>
         <form action="retrieve" method="get">
 
-            ID: <input type="text" name="id" size="10"
-                          placeholder="Enter Students ID leave blank to view all students">
+            Email: <input type="text" name="email" size="70"
+                          placeholder="Enter student's email address or leave blank to view all patients">
             <br><br>
 
             Start Date: <input type="text" name="startdate" id="begindatepicker" size="30" required>
@@ -47,9 +47,9 @@
             <br><br>
 
             <input type='radio' name='lowhigh' value='all' checked>All records
-            <input type='radio' name='lowhigh' value='low'>Just Lows
-            <input type='radio' name='lowhigh' value='high'>Just Highs
-            <input type='radio' name='lowhigh' value='lowhigh'>Just Lows and Highs
+            <input type='radio' name='lowhigh' value='low'>Low Grades
+            <input type='radio' name='lowhigh' value='high'>High Grades
+            <input type='radio' name='lowhigh' value='lowhigh'>Both
             <br><br>
 
             <input type="hidden" name="action" value="report">
